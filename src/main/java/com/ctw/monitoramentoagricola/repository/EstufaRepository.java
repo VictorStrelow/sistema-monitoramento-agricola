@@ -11,8 +11,9 @@ import java.util.Optional;
 @Repository
 public interface EstufaRepository extends JpaRepository<Estufa,Long> {
 
-    Optional<Estufa> findTopByOrderByIdDesc();
+    @Query(value = "SELECT * FROM leitura_estufa ORDER BY id DESC LIMIT 1", nativeQuery = true)
+    Optional<Estufa> findMelhorRegistroRecente();
 
-    @Query(value = "SELECT * FROM monitoramento_estufa ORDER BY id DESC LIMIT 20", nativeQuery = true)
+    @Query(value = "SELECT * FROM leitura_estufa ORDER BY id DESC LIMIT 20", nativeQuery = true)
     List<Estufa> findUltimosRegistros();
 }
