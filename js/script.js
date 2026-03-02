@@ -207,23 +207,29 @@ async function fetchData() {
     try {
         const [resAtual, resHistorico] = await Promise.all([
             fetch(API + '/atual'),
+            fetch(API + '/historico')
         ]);
-        
+
         if (!resAtual.ok) throw new Error(`Erro em /atual: HTTP ${resAtual.status}`);
         if (!resHistorico.ok) throw new Error(`Erro em /historico: HTTP ${resHistorico.status}`);
-        
+
         const dadoAtual = await resAtual.json();
         const dadoHistorico = await resHistorico.json();
-        
+
         updateAtual(dadoAtual);
         updateHistorico(dadoHistorico);
-    
+
     } catch (erro) {
         console.error('[Estufa] Falha ao buscar dados:', erro.message);
-        
-        document.getElementById('status-pulse').style.background = 'var(--red)';
-        document.getElementById('status-text').textContent       = 'Offline';
-        document.getElementById('error-banner').style.display    = 'block';
+
+        const statusPulse = document.getElementById('status-pulse');
+        if (statusPulse) statusPulse.style.background = 'var(--red)';
+
+        const statusText = document.getElementById('status-text');
+        if (statusText) statusText.textContent = 'Offline';
+
+        const errorBanner = document.getElementById('error-banner');
+        if (errorBanner) errorBanner.style.display = 'block';
     }
 }
 
