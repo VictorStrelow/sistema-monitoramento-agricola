@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoramento Agrícola</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="../css/style.css"/>
+</head>
+
+<body>
+    <div class="noise"></div>
+
+    <div class="wrapper">
+        <header>
+            <div class="header-left">
+                <div class="logo-icon">🌿</div>
+
+                <div>
+                    <div class="header-title">Monitoramento de Estufa</div>
+                    <div class="header-sub">Wokwi + Node.js + Java Spring API — MySQL</div>
+                </div>
+            </div>
+            
+            <div class="header-right">
+                <span class="last-update" id="last-update">—</span>
+                
+                <div class="status-badge">
+                    <div class="pulse" id="status-pulse"></div>
+
+                    <span id="status-text">Conectando...</span>
+                </div>
+            </div>
+        </header>
+        
+        <div id="error-banner">
+            ⚠ Não foi possível conectar à API. Verifique se o servidor Java está rodando em <strong>localhost:8080</strong>.
+        </div>
+        
+        <div class="main-grid">
+            <div class="card metric-card c-red">
+                <div class="card-label"><span class="dot" style="background:var(--red)"></span>Temperatura Ar</div>
+                <div><span class="card-value c-red" id="temperatura">—</span><span class="card-unit">°C</span></div>
+                <div class="bar-container"><div class="bar-fill" id="bar-temperatura" style="background:var(--red)"></div></div>
+                <div class="card-footer">Faixa ideal: 18 – 28°C</div>
+            </div>
+            
+            <div class="card metric-card c-teal">
+                <div class="card-label"><span class="dot" style="background:var(--teal)"></span>Umidade</div>
+                <div><span class="card-value c-teal" id="umidade">—</span><span class="card-unit">%</span></div>
+                <div class="bar-container"><div class="bar-fill" id="bar-umidade" style="background:var(--teal)"></div></div>
+                <div class="card-footer">Faixa ideal: 50 – 80%</div>
+            </div>
+            
+            <div class="card metric-card c-blue">
+                <div class="card-label"><span class="dot" style="background:var(--blue)"></span>Pressão</div>
+                <div><span class="card-value c-blue" id="pressao">—</span><span class="card-unit">hPa</span></div>
+                <div class="bar-container"><div class="bar-fill" id="bar-pressao" style="background:var(--blue)"></div></div>
+                <div class="card-footer">Pressão atmosférica</div>
+            </div>
+            
+            <div class="card metric-card c-amber">
+                <div class="card-label"><span class="dot" style="background:var(--amber)"></span>Luminosidade</div>
+                <div><span class="card-value c-amber" id="luminosidade">—</span><span class="card-unit">lux</span></div>
+                <div class="bar-container"><div class="bar-fill" id="bar-luminosidade" style="background:var(--amber)"></div></div>
+                <div class="card-footer">Nível de iluminação</div>
+            </div>
+        </div>
+        
+        <div class="row-2">
+            <div class="card metric-card c-green">
+                <div class="card-label"><span class="dot" style="background:var(--green)"></span>Temperatura Solo</div>
+                <div><span class="card-value c-green" id="temp_solo">—</span><span class="card-unit">°C</span></div>
+                <div class="bar-container"><div class="bar-fill" id="bar-temp-solo" style="background:var(--green)"></div></div>
+                <div class="card-footer">Sensor de solo</div>
+            </div>
+            
+            <div class="card metric-card c-purple">
+                <div class="card-label"><span class="dot" style="background:var(--purple)"></span>Distância</div>
+                <div><span class="card-value c-purple" id="distancia">—</span><span class="card-unit">cm</span></div>
+                <div class="bar-container"><div class="bar-fill" id="bar-distancia" style="background:var(--purple)"></div></div>
+                <div class="card-footer">Sensor ultrassônico</div>
+            </div>
+            
+            <div class="card metric-card">
+                <div class="card-label"><span class="dot" style="background:var(--amber)"></span>Presença (PIR)</div>
+
+                <div id="presenca-badge" class="presenca-badge clear">
+                    <span id="presenca-icon">✓</span>
+                    <span id="presenca-text">Nenhuma detecção</span>
+                </div>
+                
+                <div class="card-footer" id="presenca-footer">PIR sensor</div>
+            </div>
+        </div>
+        
+        <div class="row-3">
+            <div class="card">
+                <div class="section-header">
+                    <span class="section-title">🌡️ Temperatura Ar & Solo</span>
+                </div>
+                
+                <canvas id="chartTemperatura" height="180"></canvas>
+            </div>
+            
+            <div class="card">
+                <div class="section-header">
+                    <span class="section-title">💧 Umidade & Luminosidade</span>
+                </div>
+                
+                <canvas id="chartUmidade" height="180"></canvas>
+            </div>
+        </div>
+        
+        <div class="card" style="margin-top:20px;">
+            <div class="section-header">
+                <span class="section-title">📋 Últimos Registros</span>
+                <span class="section-title" id="table-count"></span>
+            </div>
+            
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="text-align:left">Data / Hora</th>
+                            <th>Temp. Ar</th>
+                            <th>Umidade</th>
+                            <th>Pressão</th>
+                            <th>Luminosidade</th>
+                            <th>Temp. Solo</th>
+                            <th>Distância</th>
+                            <th>Presença</th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody id="table-body">
+                        <tr>
+                            <td colspan="8" style="text-align:center;color:var(--muted);padding:24px;">Carregando dados...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <script src="../js/script.js"></script>
+</body>
+
+</html>
