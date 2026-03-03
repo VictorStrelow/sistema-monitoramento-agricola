@@ -207,6 +207,7 @@ async function fetchData() {
     try {
         const [resAtual, resHistorico] = await Promise.all([
             fetch(API + '/atual'),
+            fetch(API + '/historico')
         ]);
         
         if (!resAtual.ok) throw new Error(`Erro em /atual: HTTP ${resAtual.status}`);
