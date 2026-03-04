@@ -6,11 +6,11 @@ Chart.defaults.font.family = 'Space Mono';
 
 const chartOpts = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
         legend: {
             labels: { color: '#5a7a60', boxWidth: 12, padding: 16 }
         },
-        
         tooltip: {
             backgroundColor: '#111a13',
             borderColor: '#1f3024',
@@ -21,19 +21,16 @@ const chartOpts = {
             padding: 10
         }
     },
-    
     scales: {
         x: {
             ticks: { color: '#3d5c43', font: { family: 'Space Mono', size: 9 } },
             grid:  { color: '#1a2b1e' }
         },
-        
         y: {
             ticks: { color: '#3d5c43', font: { family: 'Space Mono', size: 9 } },
             grid:  { color: '#1a2b1e' }
         }
     },
-    
     animation: { duration: 600 }
 };
 
