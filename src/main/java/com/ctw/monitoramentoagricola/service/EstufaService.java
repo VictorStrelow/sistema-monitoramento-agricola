@@ -50,10 +50,12 @@ public class EstufaService {
     }
 
     public List<EstufaDTO> getHistorico() {
-        Optional<Estufa> registros = repository.findMelhorRegistroRecente();
+        List<Estufa> registros = repository.findUltimosRegistros();
+
         if (registros == null || registros.isEmpty()) {
             return Collections.emptyList();
         }
+
         return registros.stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
