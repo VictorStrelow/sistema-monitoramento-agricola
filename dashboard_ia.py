@@ -176,7 +176,7 @@ with res3:
         </div>
     """, unsafe_allow_html=True)
 
-# --- GRÁFICO (IGUAL AO SEU) ---
+# --- GRÁFICO (MODIFICADO APENAS O QUE VOCÊ PEDIU) ---
 st.markdown("<div class='custom-card'><div class='card-label'>📉 Curva de Desenvolvimento Estimada</div>", unsafe_allow_html=True)
 fig = go.Figure(go.Scatter(
     x=[0, 30, 60, 90, 120], 
@@ -184,9 +184,22 @@ fig = go.Figure(go.Scatter(
     mode='lines+markers', line=dict(color='#4ade80', width=4, shape='spline'),
     fill='tozeroy', fillcolor='rgba(74, 222, 128, 0.1)'
 ))
-fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', margin=dict(l=10, r=10, t=10, b=10), height=280,
-                  xaxis=dict(gridcolor='#1f3024', color='#5a7a60'), yaxis=dict(gridcolor='#1f3024', color='#5a7a60', range=[0, 105]))
+fig.update_layout(
+    paper_bgcolor='rgba(0,0,0,0)', 
+    plot_bgcolor='rgba(0,0,0,0)', 
+    margin=dict(l=40, r=20, t=20, b=40), 
+    height=280,
+    xaxis=dict(
+        title=dict(text="Dias de Cultivo", font=dict(color='#88a090', size=11)),
+        gridcolor='#1f3024', color='#5a7a60'
+    ), 
+    yaxis=dict(
+        title=dict(text="Percentual de Maturação (%)", font=dict(color='#88a090', size=11)),
+        gridcolor='#1f3024', color='#5a7a60', range=[0, 105]
+    )
+)
 st.plotly_chart(fig, use_container_width=True)
 st.markdown("</div>", unsafe_allow_html=True)
 
-st.markdown(f"<div style='text-align:center; color:#1f3024; font-family:Space Mono; font-size:10px;'>ALGORITMO: RANDOM FOREST | REGIÃO: {regiao_sel.upper()} | STATUS: {'REAL' if ml_ativo else 'SIMULADO'}</div>", unsafe_allow_html=True)
+# RODAPÉ (COM A COR #88a090 PARA FICAR VISÍVEL)
+st.markdown(f"<div style='text-align:center; color:#88a090; font-family:Space Mono; font-size:10px;'>ALGORITMO: RANDOM FOREST | REGIÃO: {regiao_sel.upper()} | STATUS: {'REAL' if ml_ativo else 'SIMULADO'}</div>", unsafe_allow_html=True)
