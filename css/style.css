@@ -366,9 +366,10 @@ tbody td:first-child {
 .chart-container {
     position: relative;
     width: 100%;
-    height: 220px;
+    height: 250px;
+    min-height: 250px; 
     margin-top: 16px;
-    margin-bottom: 4px;
+    display: block !important;
 }
 
 .chart-container canvas {
